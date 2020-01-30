@@ -5,11 +5,19 @@ services:
     build:
       context: .
       dockerfile: dockerfiles/Dockerfile
-    ports:
-      - 8080:8080
     depends_on:
       - database
     restart: always
+
+  nginx:
+    image: nginx:1.17.8-alpine
+    restart: always
+    depends_on:
+      - backend
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8080:80
 
   database:
     image: postgres:12-alpine
